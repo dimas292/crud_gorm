@@ -12,6 +12,10 @@ type Database struct {
 	DB *gorm.DB
 }
 
+// depend to router
+func NewDatabaseHandler(db *gorm.DB)*Database{
+	return &Database{DB: db}
+}
 // NewCreateProduct adalah handler untuk membuat produk baru
 func (d *Database) NewCreateProduct(ctx *gin.Context) {
 	var req entity.Product
@@ -43,6 +47,11 @@ func (d *Database) NewCreateProduct(ctx *gin.Context) {
 }
 
 func (d *Database) NewGetAll(ctx *gin.Context) {
+
+	if d.DB == nil {
+        ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Database not initialized"})
+        return
+    }
 
 	var product []entity.Product
 

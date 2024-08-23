@@ -19,11 +19,11 @@ func main() {
 	}
 	// connect database
 	db, err := database.ConnectPostgres(
-		cfg.DB.Host,
-		cfg.DB.Port,
-		cfg.DB.User,
-		cfg.DB.Pass,
-		cfg.DB.Name,
+		"localhost",
+		"5432",
+		"postgres",
+		"root",
+		"postgres",
 	)
 	if err != nil {
 		panic(err)
@@ -36,7 +36,7 @@ func main() {
 	db.AutoMigrate(entity.Product{})
 	// routing
 	r := gin.New()
-	router.SetUp(r)
+	router.SetUp(r, db)
 	r.Run(cfg.App.Port)
 }
 

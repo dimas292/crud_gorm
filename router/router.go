@@ -4,13 +4,14 @@ import (
 	"latihan2/handler"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 
-func SetUp(router *gin.Engine){
+func SetUp(router *gin.Engine, db *gorm.DB){
 
-	var dbHandler handler.Database
-
+	dbHandler := handler.NewDatabaseHandler(db)
+	
 	router.POST("/products", dbHandler.NewCreateProduct)
 	router.GET("/products", dbHandler.NewGetAll)
 	router.GET("/product/:id", dbHandler.NewGetOneByID)
