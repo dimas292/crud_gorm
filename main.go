@@ -25,34 +25,27 @@ func main() {
 		cfg.DB.Pass,
 		cfg.DB.Name,
 	)
-
 	if err != nil {
 		panic(err)
 	}
-
 	if db == nil {
 		panic("db not connected")
 	}
-
 	log.Println("db connected")
-
+	// migrasi
 	db.AutoMigrate(entity.Product{})
-
+	// routing
 	r := gin.New()
-
 	router.SetUp(r)
-
 	r.Run(cfg.App.Port)
 }
 
 func loadConfig(filename string) (conf entity.Config, err error) {
-
 	f, err := os.ReadFile(filename)
 
 	if err != nil {
 		return
 	}
-
 	err = yaml.Unmarshal(f, &conf)
 	return
 }
