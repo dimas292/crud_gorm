@@ -3,7 +3,7 @@ package main
 import (
 	"latihan2/database"
 	"latihan2/entity"
-	"latihan2/handler"
+	"latihan2/router"
 	"log"
 	"os"
 
@@ -14,11 +14,9 @@ import (
 func main() {
 	// config
 	cfg, err := loadConfig("config.yaml")
-
 	if err != nil {
 		panic(err)
 	}
-
 	// connect database
 	db, err := database.ConnectPostgres(
 		cfg.DB.Host,
@@ -37,17 +35,11 @@ func main() {
 
 	db.AutoMigrate(entity.Product{})
 
-	router := gin.New()
+	r := gin.New()
 
-	dbHandler := &handler.Database{DB: db}
+	router.SetUp(r)
 
-	router.POST("/products", dbHandler.NewCreateProduct)
-	router.GET("/products", dbHandler.NewGetAll)
-	router.GET("/product/:id", dbHandler.NewGetOneByID)
-	router.PUT("/product/:id", dbHandler.NewUpdate)
-	router.DELETE("/product/:id", dbHandler.NewDelete)
-
-	router.Run(cfg.App.Port)
+	r.Run(cfg.App.Port)
 }
 
 func loadConfig(filename string) (conf entity.Config, err error) {
