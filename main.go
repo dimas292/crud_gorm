@@ -25,12 +25,15 @@ func main() {
 		cfg.DB.Pass,
 		cfg.DB.Name,
 	)
+
 	if err != nil {
 		panic(err)
 	}
+
 	if db == nil {
 		panic("db not connected")
 	}
+
 	log.Println("db connected")
 
 	db.AutoMigrate(entity.Product{})
